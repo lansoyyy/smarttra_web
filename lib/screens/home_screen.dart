@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smarttra_web/screens/tab/updates_tab.dart';
 import 'package:smarttra_web/screens/tab/vehicles_tab.dart';
 import 'package:smarttra_web/widgets/text_widget.dart';
 
@@ -91,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               width: 50,
             ),
-            invehicles ? const VehiclesTab() : const SizedBox()
+            invehicles ? const VehiclesTab() : const UpdatesTab()
           ],
         ),
       ),
