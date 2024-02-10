@@ -63,10 +63,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             children: [
               TextSpan(
                 text: widget.label,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontFamily: 'Bold',
-                  color: Colors.amber[800],
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -103,7 +103,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             style: const TextStyle(
               fontFamily: 'Regular',
               fontSize: 14,
-              color: Colors.white,
+              color: Colors.black,
             ),
             textCapitalization: widget.textCapitalization!,
             keyboardType: widget.inputType,
