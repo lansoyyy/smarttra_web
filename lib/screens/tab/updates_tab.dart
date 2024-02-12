@@ -1,10 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smarttra_web/widgets/text_widget.dart';
 
-class UpdatesTab extends StatelessWidget {
+import '../../utlis/colors.dart';
+
+class UpdatesTab extends StatefulWidget {
   const UpdatesTab({super.key});
 
+  @override
+  State<UpdatesTab> createState() => _UpdatesTabState();
+}
+
+class _UpdatesTabState extends State<UpdatesTab> {
+  int day = DateTime.now().day;
+
+  final dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -16,11 +27,120 @@ class UpdatesTab extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextWidget(
-                text: 'Dashboard Overview',
-                fontSize: 18,
-                color: Colors.black,
-                fontFamily: 'Bold',
+              SizedBox(
+                height: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextWidget(
+                      text: 'Dashboard Overview',
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontFamily: 'Bold',
+                    ),
+                    Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Date',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Bold',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '*',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Bold',
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              print('asdasd');
+                              dateFromPicker(context);
+                            },
+                            child: SizedBox(
+                              width: 325,
+                              height: 50,
+                              child: TextFormField(
+                                enabled: false,
+                                style: TextStyle(
+                                  fontFamily: 'Regular',
+                                  fontSize: 14,
+                                  color: primary,
+                                ),
+
+                                decoration: InputDecoration(
+                                  suffixIcon: Icon(
+                                    Icons.calendar_month_outlined,
+                                    color: primary,
+                                  ),
+                                  hintStyle: const TextStyle(
+                                    fontFamily: 'Regular',
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                  hintText: dateController.text,
+                                  border: InputBorder.none,
+                                  disabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Colors.red,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  errorStyle: const TextStyle(
+                                      fontFamily: 'Bold', fontSize: 12),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Colors.red,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+
+                                controller: dateController,
+                                // Pass the validator to the TextFormField
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -129,7 +249,7 @@ class UpdatesTab extends StatelessWidget {
                   StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('Records')
-                          .where('day', isEqualTo: DateTime.now().day)
+                          .where('day', isEqualTo: day)
                           .snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -179,7 +299,7 @@ class UpdatesTab extends StatelessWidget {
                   StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('Records')
-                          .where('day', isEqualTo: DateTime.now().day)
+                          .where('day', isEqualTo: day)
                           .snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -234,7 +354,7 @@ class UpdatesTab extends StatelessWidget {
               StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Records')
-                      .where('day', isEqualTo: DateTime.now().day)
+                      .where('day', isEqualTo: day)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -254,7 +374,7 @@ class UpdatesTab extends StatelessWidget {
 
                     final data = snapshot.requireData;
                     return SizedBox(
-                      height: 480,
+                      height: 400,
                       child: ListView.builder(
                         itemCount: data.docs.length,
                         itemBuilder: (context, index) {
@@ -303,5 +423,36 @@ class UpdatesTab extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void dateFromPicker(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: primary,
+                onPrimary: Colors.white,
+                onSurface: Colors.grey,
+              ),
+            ),
+            child: child!,
+          );
+        },
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2025));
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+      setState(() {
+        dateController.text = formattedDate;
+        day = pickedDate.day;
+      });
+    } else {
+      return null;
+    }
   }
 }

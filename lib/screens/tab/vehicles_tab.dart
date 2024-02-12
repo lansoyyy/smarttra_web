@@ -45,6 +45,8 @@ class _VehiclesTabState extends State<VehiclesTab> {
   getRecords() {
     FirebaseFirestore.instance
         .collection('Records')
+        .where('day', isEqualTo: DateTime.now().day)
+        .where('month', isEqualTo: DateTime.now().month)
         .get()
         .then((QuerySnapshot querySnapshot) async {
       for (var doc in querySnapshot.docs) {
