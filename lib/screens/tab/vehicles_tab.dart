@@ -80,7 +80,7 @@ class _VehiclesTabState extends State<VehiclesTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextWidget(
-                      text: 'Dashboard Overview',
+                      text: 'Map Overview',
                       fontSize: 18,
                       color: Colors.black,
                       fontFamily: 'Bold',

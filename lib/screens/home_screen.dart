@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smarttra_web/screens/tab/updates_tab.dart';
+import 'package:smarttra_web/screens/tab/users_tab.dart';
 import 'package:smarttra_web/screens/tab/vehicles_tab.dart';
 import 'package:smarttra_web/widgets/text_widget.dart';
 
@@ -13,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool invehicles = true;
   bool inupdates = false;
+
+  bool inuser = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         setState(() {
                           invehicles = true;
                           inupdates = false;
+                          inuser = false;
                         });
                       },
                       leading: Icon(
@@ -73,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         setState(() {
                           invehicles = false;
                           inupdates = true;
+                          inuser = false;
                         });
                       },
                       leading: Icon(
@@ -85,6 +90,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: inupdates ? Colors.black : Colors.grey,
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ListTile(
+                      onTap: () {
+                        setState(() {
+                          invehicles = false;
+                          inupdates = false;
+                          inuser = true;
+                        });
+                      },
+                      leading: Icon(
+                        Icons.account_circle,
+                        color: inuser ? Colors.black : Colors.grey,
+                      ),
+                      title: TextWidget(
+                        text: 'User Management',
+                        fontSize: 18,
+                        color: inuser ? Colors.black : Colors.grey,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -92,7 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               width: 50,
             ),
-            invehicles ? const VehiclesTab() : const UpdatesTab()
+            invehicles
+                ? const VehiclesTab()
+                : inuser
+                    ? const AddUserTab()
+                    : const UpdatesTab()
           ],
         ),
       ),

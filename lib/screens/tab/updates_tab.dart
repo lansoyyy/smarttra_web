@@ -15,7 +15,8 @@ class UpdatesTab extends StatefulWidget {
 class _UpdatesTabState extends State<UpdatesTab> {
   int day = DateTime.now().day;
 
-  final dateController = TextEditingController();
+  final dateController = TextEditingController(
+      text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
   @override
   Widget build(BuildContext context) {
     return Card(
